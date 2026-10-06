@@ -170,6 +170,7 @@ select, input, textarea {
     outline: none;
     font-size: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    text-transform: none;
 }
 
 select {
@@ -309,7 +310,6 @@ textarea {
         <p>Encrypt • Decrypt • Secure</p>
     </div>
 
-    <!-- MODE -->
     <div class="card">
         <div class="section-title">Mode</div>
         <div class="mode">
@@ -322,7 +322,6 @@ textarea {
         </div>
     </div>
 
-    <!-- ROTORS -->
     <div class="card">
         <div class="section-title">Rotors — Left / Middle / Right</div>
 
@@ -331,12 +330,10 @@ textarea {
                 <label>Left Rotor</label>
                 <select id="rotor1"></select>
             </div>
-
             <div class="control">
                 <label>Middle Rotor</label>
                 <select id="rotor2"></select>
             </div>
-
             <div class="control">
                 <label>Right Rotor</label>
                 <select id="rotor3"></select>
@@ -344,7 +341,6 @@ textarea {
         </div>
     </div>
 
-    <!-- START POSITIONS -->
     <div class="card">
         <div class="section-title">Starting Positions — L / M / R</div>
 
@@ -353,12 +349,10 @@ textarea {
                 <label>Left Position</label>
                 <select id="pos1"></select>
             </div>
-
             <div class="control">
                 <label>Middle Position</label>
                 <select id="pos2"></select>
             </div>
-
             <div class="control">
                 <label>Right Position</label>
                 <select id="pos3"></select>
@@ -366,49 +360,44 @@ textarea {
         </div>
     </div>
 
-    <!-- PLUGBOARD -->
     <div class="card">
         <div class="section-title">Plugboard</div>
         <input
             id="plugboard"
             type="text"
             value="AB CD EF GH"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="none"
             spellcheck="false"
             placeholder="AB CD EF GH"
         >
-        <div class="hint">
-            Enter pairs such as AB CD EF GH
-        </div>
+        <div class="hint">Enter pairs such as AB CD EF GH</div>
     </div>
 
-    <!-- MESSAGE -->
     <div class="card">
         <div class="section-title">Message</div>
         <textarea
             id="message"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="none"
             spellcheck="false"
             placeholder="Enter your message here..."
         ></textarea>
     </div>
 
-    <!-- ACTION -->
     <div class="card">
         <button id="action" class="action" onclick="runCipher()">
             🔐 Encrypt / Get Result
         </button>
 
         <div class="secondary-row">
-            <button class="secondary" onclick="copyResult()">
-                📋 Copy Result
-            </button>
-
-            <button class="secondary" onclick="clearAll()">
-                🗑 Clear
-            </button>
+            <button class="secondary" onclick="copyResult()">📋 Copy Result</button>
+            <button class="secondary" onclick="clearAll()">🗑 Clear</button>
         </div>
     </div>
 
-    <!-- RESULT -->
     <div class="card">
         <div class="section-title">Result</div>
         <textarea
@@ -419,9 +408,7 @@ textarea {
         ></textarea>
     </div>
 
-    <div class="hint">
-        Use the exact same rotors, positions and plugboard to decrypt.
-    </div>
+    <div class="hint">Use the exact same rotors, positions and plugboard to decrypt.</div>
 
 </div>
 
@@ -453,7 +440,6 @@ function fillSelectors() {
 
     for (const id of ["rotor1", "rotor2", "rotor3"]) {
         const select = document.getElementById(id);
-
         for (const rotor of rotorOptions) {
             const option = document.createElement("option");
             option.value = rotor;
@@ -468,7 +454,6 @@ function fillSelectors() {
 
     for (const id of ["pos1", "pos2", "pos3"]) {
         const select = document.getElementById(id);
-
         for (const letter of ALPHABET) {
             const option = document.createElement("option");
             option.value = letter;
@@ -484,73 +469,37 @@ function fillSelectors() {
 
 function setMode(newMode) {
     mode = newMode;
-
-    document.getElementById("encryptMode")
-        .classList.toggle("active", mode === "encrypt");
-
-    document.getElementById("decryptMode")
-        .classList.toggle("active", mode === "decrypt");
-
-    document.getElementById("action").textContent =
-        mode === "encrypt"
-        ? "🔐 Encrypt / Get Result"
-        : "🔓 Decrypt / Get Result";
+    document.getElementById("encryptMode").classList.toggle("active", mode === "encrypt");
+    document.getElementById("decryptMode").classList.toggle("active", mode === "decrypt");
+    document.getElementById("action").textContent = mode === "encrypt" ? "🔐 Encrypt / Get Result" : "🔓 Decrypt / Get Result";
 }
 
 function makePlugboard(pairs) {
     const board = {};
-
-    for (const c of ALPHABET) {
-        board[c] = c;
-    }
-
+    for (const c of ALPHABET) board[c] = c;
     for (const [a, b] of pairs) {
         board[a] = b;
         board[b] = a;
     }
-
     return board;
 }
 
 function getPlugboard() {
-    const raw = document
-        .getElementById("plugboard")
-        .value
-        .toUpperCase()
-        .trim();
-
-    if (!raw) {
-        return [];
-    }
+    const raw = document.getElementById("plugboard").value.toUpperCase().trim();
+    if (!raw) return [];
 
     const parts = raw.split(/\s+/);
     const pairs = [];
     const used = new Set();
 
     for (const pair of parts) {
-        if (pair.length !== 2) {
-            throw new Error(
-                `Invalid plugboard pair: ${pair}. Use AB CD EF GH.`
-            );
-        }
-
+        if (pair.length !== 2) throw new Error(`Invalid plugboard pair: ${pair}. Use AB CD EF GH.`);
         const a = pair[0];
         const b = pair[1];
-
-        if (!ALPHABET.includes(a) || !ALPHABET.includes(b)) {
-            throw new Error("Plugboard pairs can only contain A-Z.");
-        }
-
-        if (a === b) {
-            throw new Error(`${pair}: a letter cannot connect to itself.`);
-        }
-
-        if (used.has(a) || used.has(b)) {
-            throw new Error(`Letter used more than once: ${pair}`);
-        }
-
-        used.add(a);
-        used.add(b);
+        if (!ALPHABET.includes(a) || !ALPHABET.includes(b)) throw new Error("Plugboard pairs can only contain A-Z.");
+        if (a === b) throw new Error(`${pair}: a letter cannot connect to itself.`);
+        if (used.has(a) || used.has(b)) throw new Error(`Letter used more than once: ${pair}`);
+        used.add(a); used.add(b);
         pairs.push([a, b]);
     }
 
@@ -560,27 +509,19 @@ function getPlugboard() {
 function rotorForward(letter, wiring, position) {
     const index = (ALPHABET.indexOf(letter) + position) % 26;
     const mapped = wiring[index];
-
     return ALPHABET[(ALPHABET.indexOf(mapped) - position + 26) % 26];
 }
 
 function rotorBackward(letter, wiring, position) {
     const index = (ALPHABET.indexOf(letter) + position) % 26;
     const mapped = ALPHABET[wiring.indexOf(ALPHABET[index])];
-
     return ALPHABET[(ALPHABET.indexOf(mapped) - position + 26) % 26];
 }
 
 class Enigma {
     constructor(rotorNames, positions, plugPairs) {
         this.rotorNames = rotorNames;
-
-        this.wirings = [
-            ROTORS[rotorNames[0]],
-            ROTORS[rotorNames[1]],
-            ROTORS[rotorNames[2]]
-        ];
-
+        this.wirings = [ROTORS[rotorNames[0]], ROTORS[rotorNames[1]], ROTORS[rotorNames[2]]];
         this.positions = [...positions];
         this.plugboard = makePlugboard(plugPairs);
     }
@@ -589,7 +530,6 @@ class Enigma {
         const left = this.positions[0];
         const middle = this.positions[1];
         const right = this.positions[2];
-
         const middleAtNotch = ALPHABET[middle] === NOTCHES[this.rotorNames[1]];
         const rightAtNotch = ALPHABET[right] === NOTCHES[this.rotorNames[2]];
 
@@ -605,7 +545,6 @@ class Enigma {
 
     encryptLetter(letter) {
         this.stepRotors();
-
         letter = this.plugboard[letter];
 
         letter = rotorForward(letter, this.wirings[2], this.positions[2]);
@@ -619,21 +558,15 @@ class Enigma {
         letter = rotorBackward(letter, this.wirings[2], this.positions[2]);
 
         letter = this.plugboard[letter];
-
         return letter;
     }
 
     encrypt(message) {
         let result = "";
-
         for (const char of message.toUpperCase()) {
-            if (ALPHABET.includes(char)) {
-                result += this.encryptLetter(char);
-            } else {
-                result += char;
-            }
+            if (ALPHABET.includes(char)) result += this.encryptLetter(char);
+            else result += char;
         }
-
         return result;
     }
 }
@@ -646,9 +579,7 @@ function runCipher() {
             document.getElementById("rotor3").value
         ];
 
-        if (new Set(rotorNames).size !== 3) {
-            throw new Error("Please choose three different rotors.");
-        }
+        if (new Set(rotorNames).size !== 3) throw new Error("Please choose three different rotors.");
 
         const positions = [
             ALPHABET.indexOf(document.getElementById("pos1").value),
@@ -657,18 +588,12 @@ function runCipher() {
         ];
 
         const message = document.getElementById("message").value;
-
-        if (!message.trim()) {
-            throw new Error("Enter a message first.");
-        }
+        if (!message.trim()) throw new Error("Enter a message first.");
 
         const plugPairs = getPlugboard();
-
         const machine = new Enigma(rotorNames, positions, plugPairs);
         const output = machine.encrypt(message);
-
         document.getElementById("result").value = output;
-
     } catch (error) {
         alert(error.message);
     }
@@ -676,7 +601,6 @@ function runCipher() {
 
 async function copyResult() {
     const result = document.getElementById("result").value;
-
     if (!result) {
         alert("There is no result to copy yet.");
         return;
