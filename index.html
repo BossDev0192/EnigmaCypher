@@ -7,6 +7,20 @@
 <title>Enigma Cipher</title>
 
 <style>
+:root {
+    --bg-1: #05110f;
+    --bg-2: #0c221e;
+    --panel: rgba(12, 27, 23, 0.92);
+    --panel-soft: rgba(17, 35, 30, 0.8);
+    --gold-1: #f4d58b;
+    --gold-2: #d7af5d;
+    --gold-3: #8c6b2f;
+    --ink: #f6f1e7;
+    --muted: #b9b4a6;
+    --border: rgba(212, 176, 109, 0.6);
+    --shadow: rgba(0, 0, 0, 0.26);
+}
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -15,113 +29,152 @@
 html, body {
     margin: 0;
     min-height: 100%;
-    background: #07110f;
-    color: #f2e9d5;
+    background: var(--bg-1);
+    color: var(--ink);
     font-family: Arial, sans-serif;
 }
 
 body {
     min-height: 100vh;
     background:
-        radial-gradient(circle at 10% 15%, rgba(105, 78, 35, .22), transparent 28%),
-        radial-gradient(circle at 90% 85%, rgba(40, 90, 70, .18), transparent 30%),
-        linear-gradient(145deg, #050b09, #10231e 50%, #07110f);
+        radial-gradient(circle at 10% 15%, rgba(244, 213, 139, 0.10), transparent 26%),
+        radial-gradient(circle at 90% 80%, rgba(52, 116, 94, 0.16), transparent 30%),
+        linear-gradient(145deg, #040b0a, #10241f 45%, #07110f);
     background-attachment: fixed;
-    padding: 14px;
+    padding: 18px;
 }
 
 .app {
     width: 100%;
-    max-width: 900px;
+    max-width: 920px;
     margin: auto;
 }
 
 .header {
     text-align: center;
-    padding: 12px 4px 18px;
+    padding: 10px 4px 18px;
+}
+
+.header-badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 7px 14px;
+    border: 1px solid rgba(212, 176, 109, 0.5);
+    border-radius: 999px;
+    background: rgba(22, 39, 35, 0.8);
+    color: var(--gold-1);
+    letter-spacing: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .header h1 {
     margin: 0;
-    color: #f0d99d;
+    color: var(--gold-1);
     font-family: Georgia, serif;
-    font-size: clamp(28px, 8vw, 48px);
+    font-size: clamp(30px, 8vw, 54px);
     letter-spacing: 2px;
+    text-shadow: 0 4px 20px rgba(255, 217, 137, 0.18);
 }
 
 .header p {
-    margin: 7px 0 0;
-    color: #d8b46a;
+    margin: 10px 0 0;
+    color: var(--gold-2);
     font-size: 11px;
     letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 .card {
-    background: rgba(11, 25, 22, .96);
-    border: 1px solid #806536;
-    border-radius: 16px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(15, 29, 26, 0.96), rgba(9, 17, 16, 0.94));
+    border: 1px solid var(--border);
+    border-radius: 18px;
     padding: 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 12px 35px rgba(0,0,0,.28);
+    margin-bottom: 14px;
+    box-shadow: 0 16px 35px var(--shadow);
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244, 213, 139, 0.7), transparent);
 }
 
 .section-title {
-    color: #d8b46a;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: 9px;
+    color: var(--gold-2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 }
 
-/* Mode */
 .mode {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 9px;
+    gap: 10px;
 }
 
 .mode button {
-    min-height: 48px;
-    border: 1px solid #66532f;
-    border-radius: 10px;
-    background: #10231e;
-    color: #f2e9d5;
+    min-height: 50px;
+    border: 1px solid rgba(166, 134, 78, 0.8);
+    border-radius: 12px;
+    background: rgba(16, 35, 30, 0.9);
+    color: var(--ink);
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.mode button:hover,
+.secondary:hover,
+.action:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
 }
 
 .mode button.active {
-    background: #d8b46a;
+    background: linear-gradient(135deg, var(--gold-1), #d7af5d);
     color: #17130b;
+    box-shadow: 0 10px 20px rgba(215, 175, 93, 0.18);
 }
 
-/* Three rotor controls */
 .controls-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
+    gap: 10px;
 }
 
 .control label {
     display: block;
-    color: #a8a493;
+    color: var(--muted);
     font-size: 11px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
 }
 
 select, input, textarea {
     width: 100%;
-    border: 1px solid #66532f;
-    border-radius: 10px;
-    background: #07110f;
-    color: #f2e9d5;
+    border: 1px solid rgba(166, 134, 78, 0.9);
+    border-radius: 12px;
+    background: rgba(7, 17, 15, 0.9);
+    color: var(--ink);
     outline: none;
     font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 select {
-    height: 48px;
-    padding: 0 9px;
+    height: 49px;
+    padding: 0 10px;
 }
 
 input {
@@ -130,92 +183,92 @@ input {
 }
 
 select:focus, input:focus, textarea:focus {
-    border-color: #d8b46a;
+    border-color: var(--gold-2);
+    box-shadow: 0 0 0 3px rgba(223, 185, 98, 0.15);
 }
 
-/* Message/result */
 textarea {
     min-height: 150px;
     resize: vertical;
     padding: 13px;
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
-.result {
-    color: #f0d99d;
-}
-
-/* Main action */
 .action {
     width: 100%;
-    min-height: 58px;
-    border: 0;
-    border-radius: 12px;
-    background: #d8b46a;
-    color: #17130b;
+    min-height: 60px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+    color: #19150d;
     font-size: 17px;
-    font-weight: bold;
-    box-shadow: 0 6px 18px rgba(216,180,106,.15);
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    box-shadow: 0 10px 24px rgba(216, 180, 106, 0.18);
+    transition: transform 0.12s ease, filter 0.2s ease;
+    cursor: pointer;
 }
 
 .action:active {
-    transform: scale(.98);
-    background: #f0d99d;
+    transform: scale(0.99);
 }
 
 .secondary-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 9px;
-    margin-top: 9px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .secondary {
     min-height: 48px;
-    border: 1px solid #66532f;
-    border-radius: 10px;
-    background: #10231e;
-    color: #f2e9d5;
+    border: 1px solid rgba(166, 134, 78, 0.85);
+    border-radius: 11px;
+    background: rgba(16, 35, 30, 0.92);
+    color: var(--ink);
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 700;
+    transition: transform 0.12s ease, filter 0.2s ease;
+    cursor: pointer;
 }
 
 .hint {
     text-align: center;
-    color: #777d73;
+    color: var(--muted);
     font-size: 11px;
     margin-top: 12px;
+    line-height: 1.5;
 }
 
-/* Decorative background details */
 .machine {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    opacity: .22;
-    margin: 2px 0 13px;
+    gap: 12px;
+    opacity: 0.9;
+    margin: 2px 0 14px;
 }
 
 .rotor {
-    width: 45px;
-    height: 45px;
-    border: 2px solid #d8b46a;
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(244, 213, 139, 0.9);
     border-radius: 50%;
     display: grid;
     place-items: center;
     font-family: monospace;
-    color: #f0d99d;
+    color: var(--gold-1);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 18px rgba(255, 213, 126, 0.08);
 }
 
-/* Small phones */
 @media (max-width: 430px) {
     body {
-        padding: 9px;
+        padding: 10px;
     }
 
     .card {
         padding: 12px;
-        border-radius: 13px;
+        border-radius: 14px;
     }
 
     .controls-grid {
@@ -227,15 +280,11 @@ textarea {
     }
 
     textarea {
-        min-height: 135px;
+        min-height: 130px;
     }
 
     .header {
-        padding-bottom: 13px;
-    }
-
-    .header h1 {
-        font-size: 30px;
+        padding-bottom: 12px;
     }
 
     .header p {
@@ -255,13 +304,14 @@ textarea {
             <div class="rotor">II</div>
             <div class="rotor">III</div>
         </div>
+        <div class="header-badge">Cipher Lab</div>
         <h1>ENIGMA CIPHER</h1>
-        <p>ENCRYPT • DECRYPT • SECURE</p>
+        <p>Encrypt • Decrypt • Secure</p>
     </div>
 
     <!-- MODE -->
     <div class="card">
-        <div class="section-title">MODE</div>
+        <div class="section-title">Mode</div>
         <div class="mode">
             <button id="encryptMode" class="active" onclick="setMode('encrypt')">
                 🔐 Encrypt
@@ -274,21 +324,21 @@ textarea {
 
     <!-- ROTORS -->
     <div class="card">
-        <div class="section-title">ROTORS — LEFT / MIDDLE / RIGHT</div>
+        <div class="section-title">Rotors — Left / Middle / Right</div>
 
         <div class="controls-grid">
             <div class="control">
-                <label>LEFT ROTOR</label>
+                <label>Left Rotor</label>
                 <select id="rotor1"></select>
             </div>
 
             <div class="control">
-                <label>MIDDLE ROTOR</label>
+                <label>Middle Rotor</label>
                 <select id="rotor2"></select>
             </div>
 
             <div class="control">
-                <label>RIGHT ROTOR</label>
+                <label>Right Rotor</label>
                 <select id="rotor3"></select>
             </div>
         </div>
@@ -296,21 +346,21 @@ textarea {
 
     <!-- START POSITIONS -->
     <div class="card">
-        <div class="section-title">STARTING POSITIONS — L / M / R</div>
+        <div class="section-title">Starting Positions — L / M / R</div>
 
         <div class="controls-grid">
             <div class="control">
-                <label>LEFT POSITION</label>
+                <label>Left Position</label>
                 <select id="pos1"></select>
             </div>
 
             <div class="control">
-                <label>MIDDLE POSITION</label>
+                <label>Middle Position</label>
                 <select id="pos2"></select>
             </div>
 
             <div class="control">
-                <label>RIGHT POSITION</label>
+                <label>Right Position</label>
                 <select id="pos3"></select>
             </div>
         </div>
@@ -318,7 +368,7 @@ textarea {
 
     <!-- PLUGBOARD -->
     <div class="card">
-        <div class="section-title">PLUGBOARD</div>
+        <div class="section-title">Plugboard</div>
         <input
             id="plugboard"
             type="text"
@@ -334,7 +384,7 @@ textarea {
 
     <!-- MESSAGE -->
     <div class="card">
-        <div class="section-title">MESSAGE</div>
+        <div class="section-title">Message</div>
         <textarea
             id="message"
             autocapitalize="characters"
@@ -346,23 +396,23 @@ textarea {
     <!-- ACTION -->
     <div class="card">
         <button id="action" class="action" onclick="runCipher()">
-            🔐 ENCRYPT / GET RESULT
+            🔐 Encrypt / Get Result
         </button>
 
         <div class="secondary-row">
             <button class="secondary" onclick="copyResult()">
-                📋 COPY RESULT
+                📋 Copy Result
             </button>
 
             <button class="secondary" onclick="clearAll()">
-                🗑 CLEAR
+                🗑 Clear
             </button>
         </div>
     </div>
 
     <!-- RESULT -->
     <div class="card">
-        <div class="section-title">RESULT</div>
+        <div class="section-title">Result</div>
         <textarea
             id="result"
             class="result"
@@ -400,7 +450,6 @@ const NOTCHES = {
 
 let mode = "encrypt";
 
-
 function fillSelectors() {
     const rotorOptions = ["I", "II", "III", "IV", "V"];
 
@@ -435,7 +484,6 @@ function fillSelectors() {
     document.getElementById("pos3").value = "C";
 }
 
-
 function setMode(newMode) {
     mode = newMode;
 
@@ -447,10 +495,9 @@ function setMode(newMode) {
 
     document.getElementById("action").textContent =
         mode === "encrypt"
-        ? "🔐 ENCRYPT / GET RESULT"
-        : "🔓 DECRYPT / GET RESULT";
+        ? "🔐 Encrypt / Get Result"
+        : "🔓 Decrypt / Get Result";
 }
-
 
 function makePlugboard(pairs) {
     const board = {};
@@ -466,7 +513,6 @@ function makePlugboard(pairs) {
 
     return board;
 }
-
 
 function getPlugboard() {
     const raw = document
@@ -513,34 +559,21 @@ function getPlugboard() {
     return pairs;
 }
 
-
 function rotorForward(letter, wiring, position) {
-    const index =
-        (ALPHABET.indexOf(letter) + position) % 26;
-
+    const index = (ALPHABET.indexOf(letter) + position) % 26;
     const mapped = wiring[index];
 
-    return ALPHABET[
-        (ALPHABET.indexOf(mapped) - position + 26) % 26
-    ];
+    return ALPHABET[(ALPHABET.indexOf(mapped) - position + 26) % 26];
 }
-
 
 function rotorBackward(letter, wiring, position) {
-    const index =
-        (ALPHABET.indexOf(letter) + position) % 26;
+    const index = (ALPHABET.indexOf(letter) + position) % 26;
+    const mapped = ALPHABET[wiring.indexOf(ALPHABET[index])];
 
-    const mapped =
-        ALPHABET[wiring.indexOf(ALPHABET[index])];
-
-    return ALPHABET[
-        (ALPHABET.indexOf(mapped) - position + 26) % 26
-    ];
+    return ALPHABET[(ALPHABET.indexOf(mapped) - position + 26) % 26];
 }
 
-
 class Enigma {
-
     constructor(rotorNames, positions, plugPairs) {
         this.rotorNames = rotorNames;
 
@@ -551,91 +584,46 @@ class Enigma {
         ];
 
         this.positions = [...positions];
-
         this.plugboard = makePlugboard(plugPairs);
     }
-
 
     stepRotors() {
         const left = this.positions[0];
         const middle = this.positions[1];
         const right = this.positions[2];
 
-        const middleAtNotch =
-            ALPHABET[middle] === NOTCHES[this.rotorNames[1]];
-
-        const rightAtNotch =
-            ALPHABET[right] === NOTCHES[this.rotorNames[2]];
+        const middleAtNotch = ALPHABET[middle] === NOTCHES[this.rotorNames[1]];
+        const rightAtNotch = ALPHABET[right] === NOTCHES[this.rotorNames[2]];
 
         if (middleAtNotch) {
-            this.positions[0] =
-                (left + 1) % 26;
-
-            this.positions[1] =
-                (middle + 1) % 26;
-
+            this.positions[0] = (left + 1) % 26;
+            this.positions[1] = (middle + 1) % 26;
         } else if (rightAtNotch) {
-            this.positions[1] =
-                (middle + 1) % 26;
+            this.positions[1] = (middle + 1) % 26;
         }
 
-        this.positions[2] =
-            (right + 1) % 26;
+        this.positions[2] = (right + 1) % 26;
     }
-
 
     encryptLetter(letter) {
         this.stepRotors();
 
         letter = this.plugboard[letter];
 
-        // Right -> Middle -> Left
-        letter = rotorForward(
-            letter,
-            this.wirings[2],
-            this.positions[2]
-        );
+        letter = rotorForward(letter, this.wirings[2], this.positions[2]);
+        letter = rotorForward(letter, this.wirings[1], this.positions[1]);
+        letter = rotorForward(letter, this.wirings[0], this.positions[0]);
 
-        letter = rotorForward(
-            letter,
-            this.wirings[1],
-            this.positions[1]
-        );
+        letter = REFLECTOR[ALPHABET.indexOf(letter)];
 
-        letter = rotorForward(
-            letter,
-            this.wirings[0],
-            this.positions[0]
-        );
-
-        // Reflector
-        letter =
-            REFLECTOR[ALPHABET.indexOf(letter)];
-
-        // Left -> Middle -> Right
-        letter = rotorBackward(
-            letter,
-            this.wirings[0],
-            this.positions[0]
-        );
-
-        letter = rotorBackward(
-            letter,
-            this.wirings[1],
-            this.positions[1]
-        );
-
-        letter = rotorBackward(
-            letter,
-            this.wirings[2],
-            this.positions[2]
-        );
+        letter = rotorBackward(letter, this.wirings[0], this.positions[0]);
+        letter = rotorBackward(letter, this.wirings[1], this.positions[1]);
+        letter = rotorBackward(letter, this.wirings[2], this.positions[2]);
 
         letter = this.plugboard[letter];
 
         return letter;
     }
-
 
     encrypt(message) {
         let result = "";
@@ -652,7 +640,6 @@ class Enigma {
     }
 }
 
-
 function runCipher() {
     try {
         const rotorNames = [
@@ -666,19 +653,12 @@ function runCipher() {
         }
 
         const positions = [
-            ALPHABET.indexOf(
-                document.getElementById("pos1").value
-            ),
-            ALPHABET.indexOf(
-                document.getElementById("pos2").value
-            ),
-            ALPHABET.indexOf(
-                document.getElementById("pos3").value
-            )
+            ALPHABET.indexOf(document.getElementById("pos1").value),
+            ALPHABET.indexOf(document.getElementById("pos2").value),
+            ALPHABET.indexOf(document.getElementById("pos3").value)
         ];
 
-        const message =
-            document.getElementById("message").value;
+        const message = document.getElementById("message").value;
 
         if (!message.trim()) {
             throw new Error("Enter a message first.");
@@ -686,12 +666,7 @@ function runCipher() {
 
         const plugPairs = getPlugboard();
 
-        const machine = new Enigma(
-            rotorNames,
-            positions,
-            plugPairs
-        );
-
+        const machine = new Enigma(rotorNames, positions, plugPairs);
         const output = machine.encrypt(message);
 
         document.getElementById("result").value = output;
@@ -701,10 +676,8 @@ function runCipher() {
     }
 }
 
-
 async function copyResult() {
-    const result =
-        document.getElementById("result").value;
+    const result = document.getElementById("result").value;
 
     if (!result) {
         alert("There is no result to copy yet.");
@@ -715,7 +688,6 @@ async function copyResult() {
         await navigator.clipboard.writeText(result);
         alert("Result copied!");
     } catch {
-        // Fallback for browsers that block clipboard access.
         const box = document.getElementById("result");
         box.focus();
         box.select();
@@ -724,12 +696,10 @@ async function copyResult() {
     }
 }
 
-
 function clearAll() {
     document.getElementById("message").value = "";
     document.getElementById("result").value = "";
 }
-
 
 fillSelectors();
 </script>
